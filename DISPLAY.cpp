@@ -7,31 +7,6 @@
 #include "ex.h"
 #include "DISPLAY.h"
 
-#define LCD_CLEARDISPLAY 0x01
-#define LCD_RETURNHOME 0x02
-#define LCD_ENTRYMODESET 0x04
-#define LCD_DISPLAYCONTROL 0x08
-#define LCD_CURSORSHIFT 0x10
-#define LCD_FUNCTIONSET 0x20
-#define LCD_SETDDRAMADDR 0x80
-
-// flags for display entry mode
-#define LCD_ENTRYRIGHT 0x00
-#define LCD_ENTRYLEFT 0x02
-
-// flags for display on/off control
-#define LCD_DISPLAYON 0x04
-#define LCD_DISPLAYOFF 0x00
-#define LCD_CURSOROFF 0x00
-#define LCD_BLINKOFF 0x00
-
-// flags for function set
-#define LCD_4BITMODE 0x00
-#define LCD_2LINE 0x08
-
-
-//#define BitDisplStrobe 0x80	       // бит 7 (P2.7)
-
 
 int _displaycontrol;
 int _displaymode;
@@ -45,7 +20,7 @@ int _numlines = 4;
 
 static void EXdisplay(int value, int mode);
 
-//DISPL_PARAM	DisplParam;
+DISPL_PARAM	DisplParam;
 
 /***************************************************************************\
   <ConfigDisplay> DP-4x20 VF, нет курсора
@@ -128,21 +103,12 @@ void ClsDisplay(void)
   delayMicroseconds(2000);  // this command takes a long time!
 };
 
-int x1,y1;
-char str1;
-int as(){
-return str1;
-}
-
 /***************************************************************************\
   <DisplayYX>
 \***************************************************************************/
 void DisplayYX(int y, int x, char *str)//x,y-установить курсор
 {
-    str1=str;
-    //x-row
-int i;
-
+    int i;
  const int max_lines = sizeof(_row_offsets) / sizeof(*_row_offsets);
   if ( x >= max_lines ) {
     x = max_lines - 1;    // we count rows starting w/0
